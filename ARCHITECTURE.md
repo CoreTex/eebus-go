@@ -137,6 +137,8 @@ Actor-based implementations of specific EEBUS use cases following the EEBUS spec
 
 - `mpc`: Monitoring of Power Consumption
 - `mgcp`: Monitoring of Grid Connection Point
+- `moi`: Monitoring of Inverter
+- `mob`: Monitoring of Battery
 
 ### 5. Use Case Base (`usecases/usecase/`)
 
