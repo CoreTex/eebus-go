@@ -157,3 +157,74 @@ func (s *MaMOBSuite) Test_InvalidPowerDoesNotFallBack() {
 	_, err := s.sut.Power(s.monitoredEntity)
 	assert.Equal(s.T(), api.ErrDataInvalid, err)
 }
+
+// kostalBatteryFixture is the battery entity [2,1,1] of a KOSTAL PLENTICORE G3
+// as recorded via "Download diagnostics" (scale -1 applied): DC values, energy
+// counters under dcChargeEnergy/dcDischargeEnergy, no value state on most
+// values, no value for stateOfHealth.
+func kostalBatteryFixture() []measurementFixture {
+	return []measurementFixture{
+		{7, model.MeasurementTypeTypePercentage, model.ScopeTypeTypeStateOfCharge, 69.0},
+		{8, model.MeasurementTypeTypeEnergy, model.ScopeTypeTypeStateOfEnergy, 304704.0},
+		{10, model.MeasurementTypeTypeCapacity, model.ScopeTypeTypeUseableCapacity, 4416.0},
+		{4, model.MeasurementTypeTypePower, model.ScopeTypeTypeDCPower, -1250.0},
+		{2, model.MeasurementTypeTypeCurrent, model.ScopeTypeTypeDCCurrent, -4.7},
+		{5, model.MeasurementTypeTypeVoltage, model.ScopeTypeTypeDCVoltage, 263.7},
+		{1, model.MeasurementTypeTypeEnergy, model.ScopeTypeTypeDCChargeEnergy, 0},
+		{3, model.MeasurementTypeTypeEnergy, model.ScopeTypeTypeDCDischargeEnergy, 0},
+		{0, model.MeasurementTypeTypeCount, model.ScopeTypeTypeLoadCycleCount, 1357},
+		{6, model.MeasurementTypeTypeTemperature, model.ScopeTypeTypeComponentTemperature, 27.5},
+	}
+}
+
+func (s *MaMOBSuite) Test_KostalBattery() {
+	s.loadFixture(kostalBatteryFixture(), model.EnergyDirectionTypeConsume)
+
+	cases := map[string]struct {
+		fn   func() (float64, error)
+		want float64
+	}{
+		"power (dc fallback, discharging)": {func() (float64, error) { return s.sut.Power(s.monitoredEntity) }, -1250},
+		"current (discharging)":            {func() (float64, error) { return s.sut.Current(s.monitoredEntity) }, -4.7},
+		"voltage":                          {func() (float64, error) { return s.sut.Voltage(s.monitoredEntity) }, 263.7},
+		"soc":                              {func() (float64, error) { return s.sut.StateOfCharge(s.monitoredEntity) }, 69},
+		// reported as is (the KOSTAL value is off by a factor of 100: 69 % x 4416 Wh)
+		"state of energy":          {func() (float64, error) { return s.sut.StateOfEnergy(s.monitoredEntity) }, 304704},
+		"useable capacity":         {func() (float64, error) { return s.sut.UseableCapacity(s.monitoredEntity) }, 4416},
+		"load cycles":              {func() (float64, error) { return s.sut.LoadCycleCount(s.monitoredEntity) }, 1357},
+		"temperature":              {func() (float64, error) { return s.sut.Temperature(s.monitoredEntity) }, 27.5},
+		"charged (dc fallback)":    {func() (float64, error) { return s.sut.EnergyCharged(s.monitoredEntity) }, 0},
+		"discharged (dc fallback)": {func() (float64, error) { return s.sut.EnergyDischarged(s.monitoredEntity) }, 0},
+	}
+	for name, c := range cases {
+		got, err := c.fn()
+		assert.Nil(s.T(), err, name)
+		assert.InDelta(s.T(), c.want, got, 1e-9, name)
+	}
+
+	// no value reported for stateOfHealth
+	_, err := s.sut.StateOfHealth(s.monitoredEntity)
+	assert.NotNil(s.T(), err)
+}
+
+func (s *MaMOBSuite) Test_NewValuesIncompatibleEntity() {
+	for _, fn := range []func() (float64, error){
+		func() (float64, error) { return s.sut.StateOfEnergy(s.mockRemoteEntity) },
+		func() (float64, error) { return s.sut.UseableCapacity(s.mockRemoteEntity) },
+		func() (float64, error) { return s.sut.LoadCycleCount(s.mockRemoteEntity) },
+		func() (float64, error) { return s.sut.Voltage(s.mockRemoteEntity) },
+		func() (float64, error) { return s.sut.Current(s.mockRemoteEntity) },
+	} {
+		_, err := fn()
+		assert.Equal(s.T(), api.ErrNoCompatibleEntity, err)
+	}
+}
+
+func (s *MaMOBSuite) Test_ChargeScopePreferredOverDC() {
+	fixture := append(batteryFixture(model.ScopeTypeTypeACPowerTotal),
+		measurementFixture{20, model.MeasurementTypeTypeEnergy, model.ScopeTypeTypeDCChargeEnergy, 5})
+	s.loadFixture(fixture, model.EnergyDirectionTypeConsume)
+	got, err := s.sut.EnergyCharged(s.monitoredEntity)
+	assert.Nil(s.T(), err)
+	assert.Equal(s.T(), 1000.0, got) // "charge" wins over "dcChargeEnergy"
+}

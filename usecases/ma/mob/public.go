@@ -47,7 +47,8 @@ func (e *MOB) Power(entity spineapi.EntityRemoteInterface) (float64, error) {
 //   - ErrDataInvalid if the currently available data is invalid and should be ignored
 //   - and others
 func (e *MOB) EnergyCharged(entity spineapi.EntityRemoteInterface) (float64, error) {
-	return e.value(entity, model.MeasurementTypeTypeEnergy, model.ScopeTypeTypeCharge)
+	return e.value(entity, model.MeasurementTypeTypeEnergy,
+		model.ScopeTypeTypeCharge, model.ScopeTypeTypeDCChargeEnergy)
 }
 
 // return the total energy discharged from the battery, in Wh
@@ -57,7 +58,8 @@ func (e *MOB) EnergyCharged(entity spineapi.EntityRemoteInterface) (float64, err
 //   - ErrDataInvalid if the currently available data is invalid and should be ignored
 //   - and others
 func (e *MOB) EnergyDischarged(entity spineapi.EntityRemoteInterface) (float64, error) {
-	return e.value(entity, model.MeasurementTypeTypeEnergy, model.ScopeTypeTypeDischarge)
+	return e.value(entity, model.MeasurementTypeTypeEnergy,
+		model.ScopeTypeTypeDischarge, model.ScopeTypeTypeDCDischargeEnergy)
 }
 
 // return the state of charge, in percent
@@ -90,13 +92,78 @@ func (e *MOB) Temperature(entity spineapi.EntityRemoteInterface) (float64, error
 	return e.value(entity, model.MeasurementTypeTypeTemperature, model.ScopeTypeTypeComponentTemperature)
 }
 
+// return the energy currently stored in the battery, in Wh
+//
+// possible errors:
+//   - ErrDataNotAvailable if no such value is (yet) available
+//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+//   - and others
+func (e *MOB) StateOfEnergy(entity spineapi.EntityRemoteInterface) (float64, error) {
+	return e.value(entity, model.MeasurementTypeTypeEnergy, model.ScopeTypeTypeStateOfEnergy)
+}
+
+// return the usable capacity of the battery, in Wh
+//
+// possible errors:
+//   - ErrDataNotAvailable if no such value is (yet) available
+//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+//   - and others
+func (e *MOB) UseableCapacity(entity spineapi.EntityRemoteInterface) (float64, error) {
+	return e.value(entity, model.MeasurementTypeTypeCapacity, model.ScopeTypeTypeUseableCapacity)
+}
+
+// return the number of load cycles of the battery
+//
+// possible errors:
+//   - ErrDataNotAvailable if no such value is (yet) available
+//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+//   - and others
+func (e *MOB) LoadCycleCount(entity spineapi.EntityRemoteInterface) (float64, error) {
+	return e.value(entity, model.MeasurementTypeTypeCount, model.ScopeTypeTypeLoadCycleCount)
+}
+
+// return the DC voltage of the battery, in V
+//
+// possible errors:
+//   - ErrDataNotAvailable if no such value is (yet) available
+//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+//   - and others
+func (e *MOB) Voltage(entity spineapi.EntityRemoteInterface) (float64, error) {
+	return e.value(entity, model.MeasurementTypeTypeVoltage, model.ScopeTypeTypeDCVoltage)
+}
+
+// return the DC current of the battery, in A
+//
+//   - positive values: charging, negative values: discharging
+//
+// possible errors:
+//   - ErrDataNotAvailable if no such value is (yet) available
+//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+//   - and others
+func (e *MOB) Current(entity spineapi.EntityRemoteInterface) (float64, error) {
+	if !e.IsCompatibleEntityType(entity) {
+		return 0, api.ErrNoCompatibleEntity
+	}
+	return internal.MeasurementValueForFilter(e.LocalEntity, entity,
+		filterFor(model.MeasurementTypeTypeCurrent, model.ScopeTypeTypeDCCurrent), model.EnergyDirectionTypeConsume)
+}
+
+// value returns the first available value of the given scopes (in order).
 func (e *MOB) value(
 	entity spineapi.EntityRemoteInterface,
 	measurementType model.MeasurementTypeType,
-	scope model.ScopeTypeType,
+	scopes ...model.ScopeTypeType,
 ) (float64, error) {
 	if !e.IsCompatibleEntityType(entity) {
 		return 0, api.ErrNoCompatibleEntity
 	}
-	return internal.MeasurementValueForFilter(e.LocalEntity, entity, filterFor(measurementType, scope), "")
+	err := api.ErrDataNotAvailable
+	for _, scope := range scopes {
+		var value float64
+		value, err = internal.MeasurementValueForFilter(e.LocalEntity, entity, filterFor(measurementType, scope), "")
+		if err == nil || !errors.Is(err, api.ErrDataNotAvailable) {
+			return value, err
+		}
+	}
+	return 0, err
 }

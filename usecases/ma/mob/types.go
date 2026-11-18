@@ -33,6 +33,31 @@ const (
 	// Use `StateOfHealth` to get the current data
 	DataUpdateStateOfHealth api.EventType = "ma-mob-DataUpdateStateOfHealth"
 
+	// Battery stored energy updated
+	//
+	// Use `StateOfEnergy` to get the current data
+	DataUpdateStateOfEnergy api.EventType = "ma-mob-DataUpdateStateOfEnergy"
+
+	// Battery usable capacity updated
+	//
+	// Use `UseableCapacity` to get the current data
+	DataUpdateUseableCapacity api.EventType = "ma-mob-DataUpdateUseableCapacity"
+
+	// Battery load cycle count updated
+	//
+	// Use `LoadCycleCount` to get the current data
+	DataUpdateLoadCycleCount api.EventType = "ma-mob-DataUpdateLoadCycleCount"
+
+	// Battery DC voltage updated
+	//
+	// Use `Voltage` to get the current data
+	DataUpdateVoltage api.EventType = "ma-mob-DataUpdateVoltage"
+
+	// Battery DC current updated
+	//
+	// Use `Current` to get the current data
+	DataUpdateCurrent api.EventType = "ma-mob-DataUpdateCurrent"
+
 	// Battery temperature updated
 	//
 	// Use `Temperature` to get the current data

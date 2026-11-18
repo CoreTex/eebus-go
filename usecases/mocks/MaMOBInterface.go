@@ -167,6 +167,66 @@ func (_c *MaMOBInterface_AvailableScenariosForEntity_Call) RunAndReturn(run func
 	return _c
 }
 
+// Current provides a mock function for the type MaMOBInterface
+func (_mock *MaMOBInterface) Current(entity api.EntityRemoteInterface) (float64, error) {
+	ret := _mock.Called(entity)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Current")
+	}
+
+	var r0 float64
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) (float64, error)); ok {
+		return returnFunc(entity)
+	}
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) float64); ok {
+		r0 = returnFunc(entity)
+	} else {
+		r0 = ret.Get(0).(float64)
+	}
+	if returnFunc, ok := ret.Get(1).(func(api.EntityRemoteInterface) error); ok {
+		r1 = returnFunc(entity)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MaMOBInterface_Current_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Current'
+type MaMOBInterface_Current_Call struct {
+	*mock.Call
+}
+
+// Current is a helper method to define mock.On call
+//   - entity api.EntityRemoteInterface
+func (_e *MaMOBInterface_Expecter) Current(entity interface{}) *MaMOBInterface_Current_Call {
+	return &MaMOBInterface_Current_Call{Call: _e.mock.On("Current", entity)}
+}
+
+func (_c *MaMOBInterface_Current_Call) Run(run func(entity api.EntityRemoteInterface)) *MaMOBInterface_Current_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 api.EntityRemoteInterface
+		if args[0] != nil {
+			arg0 = args[0].(api.EntityRemoteInterface)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MaMOBInterface_Current_Call) Return(f float64, err error) *MaMOBInterface_Current_Call {
+	_c.Call.Return(f, err)
+	return _c
+}
+
+func (_c *MaMOBInterface_Current_Call) RunAndReturn(run func(entity api.EntityRemoteInterface) (float64, error)) *MaMOBInterface_Current_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // EnergyCharged provides a mock function for the type MaMOBInterface
 func (_mock *MaMOBInterface) EnergyCharged(entity api.EntityRemoteInterface) (float64, error) {
 	ret := _mock.Called(entity)
@@ -395,6 +455,66 @@ func (_c *MaMOBInterface_IsScenarioAvailableAtEntity_Call) RunAndReturn(run func
 	return _c
 }
 
+// LoadCycleCount provides a mock function for the type MaMOBInterface
+func (_mock *MaMOBInterface) LoadCycleCount(entity api.EntityRemoteInterface) (float64, error) {
+	ret := _mock.Called(entity)
+
+	if len(ret) == 0 {
+		panic("no return value specified for LoadCycleCount")
+	}
+
+	var r0 float64
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) (float64, error)); ok {
+		return returnFunc(entity)
+	}
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) float64); ok {
+		r0 = returnFunc(entity)
+	} else {
+		r0 = ret.Get(0).(float64)
+	}
+	if returnFunc, ok := ret.Get(1).(func(api.EntityRemoteInterface) error); ok {
+		r1 = returnFunc(entity)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MaMOBInterface_LoadCycleCount_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'LoadCycleCount'
+type MaMOBInterface_LoadCycleCount_Call struct {
+	*mock.Call
+}
+
+// LoadCycleCount is a helper method to define mock.On call
+//   - entity api.EntityRemoteInterface
+func (_e *MaMOBInterface_Expecter) LoadCycleCount(entity interface{}) *MaMOBInterface_LoadCycleCount_Call {
+	return &MaMOBInterface_LoadCycleCount_Call{Call: _e.mock.On("LoadCycleCount", entity)}
+}
+
+func (_c *MaMOBInterface_LoadCycleCount_Call) Run(run func(entity api.EntityRemoteInterface)) *MaMOBInterface_LoadCycleCount_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 api.EntityRemoteInterface
+		if args[0] != nil {
+			arg0 = args[0].(api.EntityRemoteInterface)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MaMOBInterface_LoadCycleCount_Call) Return(f float64, err error) *MaMOBInterface_LoadCycleCount_Call {
+	_c.Call.Return(f, err)
+	return _c
+}
+
+func (_c *MaMOBInterface_LoadCycleCount_Call) RunAndReturn(run func(entity api.EntityRemoteInterface) (float64, error)) *MaMOBInterface_LoadCycleCount_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Power provides a mock function for the type MaMOBInterface
 func (_mock *MaMOBInterface) Power(entity api.EntityRemoteInterface) (float64, error) {
 	ret := _mock.Called(entity)
@@ -594,6 +714,66 @@ func (_c *MaMOBInterface_StateOfCharge_Call) RunAndReturn(run func(entity api.En
 	return _c
 }
 
+// StateOfEnergy provides a mock function for the type MaMOBInterface
+func (_mock *MaMOBInterface) StateOfEnergy(entity api.EntityRemoteInterface) (float64, error) {
+	ret := _mock.Called(entity)
+
+	if len(ret) == 0 {
+		panic("no return value specified for StateOfEnergy")
+	}
+
+	var r0 float64
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) (float64, error)); ok {
+		return returnFunc(entity)
+	}
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) float64); ok {
+		r0 = returnFunc(entity)
+	} else {
+		r0 = ret.Get(0).(float64)
+	}
+	if returnFunc, ok := ret.Get(1).(func(api.EntityRemoteInterface) error); ok {
+		r1 = returnFunc(entity)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MaMOBInterface_StateOfEnergy_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'StateOfEnergy'
+type MaMOBInterface_StateOfEnergy_Call struct {
+	*mock.Call
+}
+
+// StateOfEnergy is a helper method to define mock.On call
+//   - entity api.EntityRemoteInterface
+func (_e *MaMOBInterface_Expecter) StateOfEnergy(entity interface{}) *MaMOBInterface_StateOfEnergy_Call {
+	return &MaMOBInterface_StateOfEnergy_Call{Call: _e.mock.On("StateOfEnergy", entity)}
+}
+
+func (_c *MaMOBInterface_StateOfEnergy_Call) Run(run func(entity api.EntityRemoteInterface)) *MaMOBInterface_StateOfEnergy_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 api.EntityRemoteInterface
+		if args[0] != nil {
+			arg0 = args[0].(api.EntityRemoteInterface)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MaMOBInterface_StateOfEnergy_Call) Return(f float64, err error) *MaMOBInterface_StateOfEnergy_Call {
+	_c.Call.Return(f, err)
+	return _c
+}
+
+func (_c *MaMOBInterface_StateOfEnergy_Call) RunAndReturn(run func(entity api.EntityRemoteInterface) (float64, error)) *MaMOBInterface_StateOfEnergy_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // StateOfHealth provides a mock function for the type MaMOBInterface
 func (_mock *MaMOBInterface) StateOfHealth(entity api.EntityRemoteInterface) (float64, error) {
 	ret := _mock.Called(entity)
@@ -751,5 +931,125 @@ func (_c *MaMOBInterface_UpdateUseCaseAvailability_Call) Return() *MaMOBInterfac
 
 func (_c *MaMOBInterface_UpdateUseCaseAvailability_Call) RunAndReturn(run func(available bool)) *MaMOBInterface_UpdateUseCaseAvailability_Call {
 	_c.Run(run)
+	return _c
+}
+
+// UseableCapacity provides a mock function for the type MaMOBInterface
+func (_mock *MaMOBInterface) UseableCapacity(entity api.EntityRemoteInterface) (float64, error) {
+	ret := _mock.Called(entity)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UseableCapacity")
+	}
+
+	var r0 float64
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) (float64, error)); ok {
+		return returnFunc(entity)
+	}
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) float64); ok {
+		r0 = returnFunc(entity)
+	} else {
+		r0 = ret.Get(0).(float64)
+	}
+	if returnFunc, ok := ret.Get(1).(func(api.EntityRemoteInterface) error); ok {
+		r1 = returnFunc(entity)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MaMOBInterface_UseableCapacity_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UseableCapacity'
+type MaMOBInterface_UseableCapacity_Call struct {
+	*mock.Call
+}
+
+// UseableCapacity is a helper method to define mock.On call
+//   - entity api.EntityRemoteInterface
+func (_e *MaMOBInterface_Expecter) UseableCapacity(entity interface{}) *MaMOBInterface_UseableCapacity_Call {
+	return &MaMOBInterface_UseableCapacity_Call{Call: _e.mock.On("UseableCapacity", entity)}
+}
+
+func (_c *MaMOBInterface_UseableCapacity_Call) Run(run func(entity api.EntityRemoteInterface)) *MaMOBInterface_UseableCapacity_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 api.EntityRemoteInterface
+		if args[0] != nil {
+			arg0 = args[0].(api.EntityRemoteInterface)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MaMOBInterface_UseableCapacity_Call) Return(f float64, err error) *MaMOBInterface_UseableCapacity_Call {
+	_c.Call.Return(f, err)
+	return _c
+}
+
+func (_c *MaMOBInterface_UseableCapacity_Call) RunAndReturn(run func(entity api.EntityRemoteInterface) (float64, error)) *MaMOBInterface_UseableCapacity_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// Voltage provides a mock function for the type MaMOBInterface
+func (_mock *MaMOBInterface) Voltage(entity api.EntityRemoteInterface) (float64, error) {
+	ret := _mock.Called(entity)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Voltage")
+	}
+
+	var r0 float64
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) (float64, error)); ok {
+		return returnFunc(entity)
+	}
+	if returnFunc, ok := ret.Get(0).(func(api.EntityRemoteInterface) float64); ok {
+		r0 = returnFunc(entity)
+	} else {
+		r0 = ret.Get(0).(float64)
+	}
+	if returnFunc, ok := ret.Get(1).(func(api.EntityRemoteInterface) error); ok {
+		r1 = returnFunc(entity)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MaMOBInterface_Voltage_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Voltage'
+type MaMOBInterface_Voltage_Call struct {
+	*mock.Call
+}
+
+// Voltage is a helper method to define mock.On call
+//   - entity api.EntityRemoteInterface
+func (_e *MaMOBInterface_Expecter) Voltage(entity interface{}) *MaMOBInterface_Voltage_Call {
+	return &MaMOBInterface_Voltage_Call{Call: _e.mock.On("Voltage", entity)}
+}
+
+func (_c *MaMOBInterface_Voltage_Call) Run(run func(entity api.EntityRemoteInterface)) *MaMOBInterface_Voltage_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 api.EntityRemoteInterface
+		if args[0] != nil {
+			arg0 = args[0].(api.EntityRemoteInterface)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MaMOBInterface_Voltage_Call) Return(f float64, err error) *MaMOBInterface_Voltage_Call {
+	_c.Call.Return(f, err)
+	return _c
+}
+
+func (_c *MaMOBInterface_Voltage_Call) RunAndReturn(run func(entity api.EntityRemoteInterface) (float64, error)) *MaMOBInterface_Voltage_Call {
+	_c.Call.Return(run)
 	return _c
 }

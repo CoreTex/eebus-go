@@ -30,6 +30,8 @@ type MaMOBInterface interface {
 
 	// return the total energy charged into the battery, in Wh
 	//
+	// Uses the "charge" scope, falling back to "dcChargeEnergy".
+	//
 	// parameters:
 	//   - entity: the entity of the battery
 	//
@@ -40,6 +42,8 @@ type MaMOBInterface interface {
 	EnergyCharged(entity spineapi.EntityRemoteInterface) (float64, error)
 
 	// return the total energy discharged from the battery, in Wh
+	//
+	// Uses the "discharge" scope, falling back to "dcDischargeEnergy".
 	//
 	// parameters:
 	//   - entity: the entity of the battery
@@ -82,4 +86,61 @@ type MaMOBInterface interface {
 	//   - ErrDataInvalid if the currently available data is invalid and should be ignored
 	//   - and others
 	Temperature(entity spineapi.EntityRemoteInterface) (float64, error)
+
+	// return the energy currently stored in the battery, in Wh
+	//
+	// parameters:
+	//   - entity: the entity of the battery
+	//
+	// possible errors:
+	//   - ErrDataNotAvailable if no such value is (yet) available
+	//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+	//   - and others
+	StateOfEnergy(entity spineapi.EntityRemoteInterface) (float64, error)
+
+	// return the usable capacity of the battery, in Wh
+	//
+	// parameters:
+	//   - entity: the entity of the battery
+	//
+	// possible errors:
+	//   - ErrDataNotAvailable if no such value is (yet) available
+	//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+	//   - and others
+	UseableCapacity(entity spineapi.EntityRemoteInterface) (float64, error)
+
+	// return the number of load cycles of the battery
+	//
+	// parameters:
+	//   - entity: the entity of the battery
+	//
+	// possible errors:
+	//   - ErrDataNotAvailable if no such value is (yet) available
+	//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+	//   - and others
+	LoadCycleCount(entity spineapi.EntityRemoteInterface) (float64, error)
+
+	// return the DC voltage of the battery, in V
+	//
+	// parameters:
+	//   - entity: the entity of the battery
+	//
+	// possible errors:
+	//   - ErrDataNotAvailable if no such value is (yet) available
+	//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+	//   - and others
+	Voltage(entity spineapi.EntityRemoteInterface) (float64, error)
+
+	// return the DC current of the battery, in A
+	//
+	//   - positive values: charging, negative values: discharging
+	//
+	// parameters:
+	//   - entity: the entity of the battery
+	//
+	// possible errors:
+	//   - ErrDataNotAvailable if no such value is (yet) available
+	//   - ErrDataInvalid if the currently available data is invalid and should be ignored
+	//   - and others
+	Current(entity spineapi.EntityRemoteInterface) (float64, error)
 }

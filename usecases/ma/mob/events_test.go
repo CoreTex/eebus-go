@@ -71,6 +71,22 @@ func (s *MaMOBSuite) Test_deviceMeasurementDataUpdate() {
 		assert.True(s.T(), s.eventCalled, "no event for scope %s", f.scope)
 	}
 
+	// the KOSTAL battery scopes (DC values, counters, capacity, cycles) trigger events too
+	s.loadFixture(kostalBatteryFixture(), model.EnergyDirectionTypeConsume)
+	for _, f := range kostalBatteryFixture() {
+		s.eventCalled = false
+		payload.Data = &model.MeasurementListDataType{
+			MeasurementData: []model.MeasurementDataType{
+				{
+					MeasurementId: util.Ptr(model.MeasurementIdType(f.id)),
+					Value:         model.NewScaledNumberType(1),
+				},
+			},
+		}
+		s.sut.deviceMeasurementDataUpdate(payload)
+		assert.True(s.T(), s.eventCalled, "no event for scope %s", f.scope)
+	}
+
 	// no callback configured: nothing happens
 	s.eventCalled = false
 	s.sut.EventCB = nil
